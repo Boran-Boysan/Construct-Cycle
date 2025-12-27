@@ -1,0 +1,81 @@
+DEBUG 2025-12-27 18:32:28,161 proactor_events Using proactor: IocpProactor
+DEBUG 2025-12-27 18:32:47,219 proactor_events Using proactor: IocpProactor
+DEBUG 2025-12-27 18:32:59,221 proactor_events Using proactor: IocpProactor
+INFO 2025-12-27 18:33:36,605 autoreload Watching for file changes with StatReloader
+INFO 2025-12-27 18:33:38,981 basehttp "GET / HTTP/1.1" 200 17971
+INFO 2025-12-27 18:33:39,364 basehttp "GET /static/css/landing.css HTTP/1.1" 200 23295
+INFO 2025-12-27 18:33:39,364 basehttp "GET /static/js/landing.js HTTP/1.1" 200 15037
+WARNING 2025-12-27 18:33:40,397 log Not Found: /favicon.ico
+WARNING 2025-12-27 18:33:40,398 basehttp "GET /favicon.ico HTTP/1.1" 404 3573
+INFO 2025-12-27 18:33:58,592 middleware API Ýsteði - IP: 127.0.0.1 | Method: GET | Path: /api/docs/ | Durum: 200 | Süre: 0.06s | Kullanýcý: Anonim
+INFO 2025-12-27 18:33:58,593 basehttp "GET /api/docs/ HTTP/1.1" 200 4460
+INFO 2025-12-27 18:33:59,370 middleware API Ýsteði - IP: 127.0.0.1 | Method: GET | Path: /api/schema/ | Durum: 200 | Süre: 0.34s | Kullanýcý: Anonim
+INFO 2025-12-27 18:33:59,371 basehttp "GET /api/schema/ HTTP/1.1" 200 204323
+INFO 2025-12-27 18:34:09,065 middleware API Ýsteði - IP: 127.0.0.1 | Method: GET | Path: /api/v1/auth/register/ | Durum: 405 | Süre: 0.00s | Kullanýcý: Anonim
+WARNING 2025-12-27 18:34:09,066 log Method Not Allowed: /api/v1/auth/register/
+WARNING 2025-12-27 18:34:09,066 basehttp "GET /api/v1/auth/register/ HTTP/1.1" 405 46
+INFO 2025-12-27 18:34:22,612 middleware API Ýsteði - IP: 127.0.0.1 | Method: GET | Path: /api/v1/auth/login/ | Durum: 405 | Süre: 0.00s | Kullanýcý: Anonim
+WARNING 2025-12-27 18:34:22,613 log Method Not Allowed: /api/v1/auth/login/
+WARNING 2025-12-27 18:34:22,614 basehttp "GET /api/v1/auth/login/ HTTP/1.1" 405 46
+INFO 2025-12-27 18:34:38,952 basehttp "GET / HTTP/1.1" 200 17971
+INFO 2025-12-27 18:34:59,814 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-12-27 18:35:00,006 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4223
+INFO 2025-12-27 18:35:00,045 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2694
+INFO 2025-12-27 18:35:00,045 basehttp "GET /static/admin/css/login.css HTTP/1.1" 200 958
+INFO 2025-12-27 18:35:00,045 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 200 18533
+INFO 2025-12-27 18:35:00,046 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2929
+INFO 2025-12-27 18:35:00,046 basehttp "GET /static/admin/css/base.css HTTP/1.1" 200 21207
+INFO 2025-12-27 18:35:00,144 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 200 1943
+INFO 2025-12-27 18:35:00,144 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+DEBUG 2025-12-27 18:40:06,932 proactor_events Using proactor: IocpProactor
+INFO 2025-12-27 18:42:06,109 autoreload Watching for file changes with StatReloader
+INFO 2025-12-27 18:42:07,512 basehttp "GET / HTTP/1.1" 200 17971
+INFO 2025-12-27 18:43:37,188 autoreload Watching for file changes with StatReloader
+INFO 2025-12-27 18:43:38,413 basehttp "GET / HTTP/1.1" 200 17971
+INFO 2025-12-27 18:43:45,868 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-12-27 18:43:45,900 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4223
+INFO 2025-12-27 18:43:51,969 basehttp "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-12-27 18:43:52,160 basehttp "GET /admin/ HTTP/1.1" 200 10618
+INFO 2025-12-27 18:43:52,382 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2025-12-27 18:43:52,401 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2025-12-27 18:43:52,401 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-12-27 18:43:59,841 basehttp "GET /admin/companies/companyuser/add/ HTTP/1.1" 200 15963
+INFO 2025-12-27 18:43:59,874 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 200 9047
+INFO 2025-12-27 18:43:59,884 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2025-12-27 18:43:59,906 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2025-12-27 18:43:59,908 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 200 7872
+INFO 2025-12-27 18:43:59,909 basehttp "GET /static/admin/js/core.js HTTP/1.1" 200 5682
+INFO 2025-12-27 18:43:59,913 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 8943
+INFO 2025-12-27 18:43:59,920 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2025-12-27 18:43:59,926 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2025-12-27 18:43:59,933 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2025-12-27 18:43:59,939 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 200 11900
+INFO 2025-12-27 18:43:59,956 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 292458
+INFO 2025-12-27 18:43:59,974 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 232381
+INFO 2025-12-27 18:43:59,994 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2025-12-27 18:44:00,021 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 8209
+INFO 2025-12-27 18:55:55,858 basehttp "GET / HTTP/1.1" 200 17971
+INFO 2025-12-27 18:55:55,934 basehttp "GET /static/css/landing.css HTTP/1.1" 200 23295
+INFO 2025-12-27 18:55:55,934 basehttp "GET /static/js/landing.js HTTP/1.1" 200 15037
+WARNING 2025-12-27 18:55:57,252 log Not Found: /favicon.ico
+WARNING 2025-12-27 18:55:57,253 basehttp "GET /favicon.ico HTTP/1.1" 404 3573
+INFO 2025-12-27 18:56:10,201 basehttp "GET / HTTP/1.1" 200 17971
+INFO 2025-12-27 18:56:16,435 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2025-12-27 18:56:16,438 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-12-27 18:56:16,444 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4223
+INFO 2025-12-27 18:56:16,466 basehttp "GET /static/admin/css/base.css HTTP/1.1" 200 21207
+INFO 2025-12-27 18:56:16,466 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2929
+INFO 2025-12-27 18:56:16,466 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2694
+INFO 2025-12-27 18:56:16,466 basehttp "GET /static/admin/css/login.css HTTP/1.1" 200 958
+INFO 2025-12-27 18:56:16,467 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 200 18533
+INFO 2025-12-27 18:56:16,521 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 200 1943
+INFO 2025-12-27 18:56:16,521 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2025-12-27 18:56:24,370 basehttp "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-12-27 18:56:24,411 basehttp "GET /admin/ HTTP/1.1" 200 10618
+INFO 2025-12-27 18:56:24,430 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2025-12-27 18:56:24,496 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2025-12-27 18:56:24,496 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-12-27 18:56:59,223 basehttp "GET / HTTP/1.1" 200 17971
+INFO 2025-12-27 19:06:41,191 middleware API Ýsteði - IP: 127.0.0.1 | Method: GET | Path: /api/v1/auth/login/ | Durum: 405 | Süre: 0.04s | Kullanýcý: admin@gmail.com
+WARNING 2025-12-27 19:06:41,192 log Method Not Allowed: /api/v1/auth/login/
+WARNING 2025-12-27 19:06:41,192 basehttp "GET /api/v1/auth/login/ HTTP/1.1" 405 46
