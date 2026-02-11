@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Doğrulama - ConstructCycle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #264653 0%, #2A9D8F 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .icon-container {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #FF6B35, #2A9D8F);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .icon-container i {
+            color: white;
+            font-size: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .email-display {
+            background: #f0f0f0;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            color: #2A9D8F;
+            font-weight: 600;
+        }
+
+        /* ============================================
+           SINGLE HIDDEN INPUT + VISUAL BOXES
+           Paste, select, mobile keyboard hepsini çözer
+           ============================================ */
+        .code-input-wrapper {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .code-display {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            cursor: text;
+        }
+
+        .code-box {
+            width: 50px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            transition: all 0.2s;
+            background: white;
+            user-select: none;
+        }
+
+        .code-box.active {
+            border-color: #FF6B35;
+            box-shadow: 0 0 10px rgba(255, 107, 53, 0.3);
+        }
+
+        .code-box.filled {
+            border-color: #2A9D8F;
+            background: #f0fdf4;
+        }
+
+        .hidden-code-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            opacity: 0;
+            font-size: 24px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: transparent;
+            caret-color: transparent;
+            z-index: 10;
+        }
+
+        .verify-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #FF6B35, #e05a2b);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .verify-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .verify-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .resend-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .resend-text {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .resend-btn {
+            background: none;
+            border: none;
+            color: #FF6B35;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 14px;
+        }
+
+        .resend-btn:disabled {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .timer {
+            color: #999;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .alert-error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #bbf7d0;
+        }
+
+        .alert-info {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+        }
+
+        .success-icon {
+            animation: scaleIn 0.5s;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-link:hover { color: #FF6B35; }
+
+        @media (max-width: 480px) {
+            .container { padding: 30px 20px; }
+            .code-box { width: 42px; height: 52px; font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- DOĞRULAMA FORMU -->
+        <div id="verification-form">
+            <div class="icon-container">
+                <i class="fas fa-envelope"></i>
+            </div>
+
+            <h1>Email Doğrulama</h1>
+            <p class="subtitle">Email adresinize gönderilen 6 haneli kodu girin</p>
+
+            <div class="email-display" id="emailDisplay"></div>
+
+            <div id="alert-container"></div>
+
+            <!-- Tek hidden input + görsel kutular -->
+            <div class="code-input-wrapper">
+                <input
+                    type="text"
+                    id="codeInput"
+                    class="hidden-code-input"
+                    maxlength="6"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                    autofocus
+                >
+                <div class="code-display" id="codeDisplay">
+                    <div class="code-box" id="box0"></div>
+                    <div class="code-box" id="box1"></div>
+                    <div class="code-box" id="box2"></div>
+                    <div class="code-box" id="box3"></div>
+                    <div class="code-box" id="box4"></div>
+                    <div class="code-box" id="box5"></div>
+                </div>
+            </div>
+
+            <button class="verify-btn" id="verifyBtn" type="button">
+                <i class="fas fa-check-circle"></i> Doğrula
+            </button>
+
+            <div class="resend-section">
+                <p class="resend-text">Kod gelmedi mi?</p>
+                <button class="resend-btn" id="resendBtn" type="button">Yeni kod gönder</button>
+                <div class="timer" id="timer"></div>
+            </div>
+
+            <a href="register.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Kayıt sayfasına dön
+            </a>
+        </div>
+
+        <!-- BAŞARI GÖRÜNÜMÜ -->
+        <div id="success-view" style="display: none;">
+            <div class="icon-container success-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h1>Başarılı! 🎉</h1>
+            <p class="subtitle" id="successMessage">Email adresiniz başarıyla doğrulandı.</p>
+            <button class="verify-btn" onclick="window.location.href='login.html'">
+                Giriş Yap
+            </button>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const API_BASE_URL = 'http://localhost:8000/api/v1/auth';
+
+        // ============================================
+        // EMAIL KONTROLÜ
+        // ============================================
+        const urlParams = new URLSearchParams(window.location.search);
+        const userEmail = urlParams.get('email') || localStorage.getItem('pendingEmail');
+
+        if (!userEmail) {
+            window.location.href = 'register.html';
+            return;
+        }
+
+        document.getElementById('emailDisplay').textContent = userEmail;
+
+        // ============================================
+        // DOM ELEMENTLERİ
+        // ============================================
+        const codeInput = document.getElementById('codeInput');
+        const boxes = [
+            document.getElementById('box0'),
+            document.getElementById('box1'),
+            document.getElementById('box2'),
+            document.getElementById('box3'),
+            document.getElementById('box4'),
+            document.getElementById('box5')
+        ];
+        const verifyBtn = document.getElementById('verifyBtn');
+        const resendBtn = document.getElementById('resendBtn');
+        const alertContainer = document.getElementById('alert-container');
+        const codeDisplay = document.getElementById('codeDisplay');
+
+        // ============================================
+        // GÖRSEL KUTULARI GÜNCELLE
+        // ============================================
+        function updateBoxes() {
+            const val = codeInput.value;
+            boxes.forEach((box, i) => {
+                box.textContent = val[i] || '';
+                box.classList.remove('active', 'filled');
+                if (val[i]) {
+                    box.classList.add('filled');
+                } else if (i === val.length) {
+                    box.classList.add('active');
+                }
+            });
+            if (val.length === 0) boxes[0].classList.add('active');
+        }
+
+        // ============================================
+        // INPUT OLAYLARI
+        // ============================================
+
+        // Her input değişikliğinde
+        codeInput.addEventListener('input', () => {
+            codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 6);
+            updateBoxes();
+            if (codeInput.value.length === 6) {
+                setTimeout(() => verifyCode(), 300);
+            }
+        });
+
+        // Paste - boşluklu/tireli kodları da kabul et (ör: "123 456", "123-456")
+        codeInput.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const pasted = (e.clipboardData || window.clipboardData).getData('text');
+            const cleaned = pasted.replace(/\D/g, '').slice(0, 6);
+            codeInput.value = cleaned;
+            updateBoxes();
+            if (cleaned.length === 6) {
+                setTimeout(() => verifyCode(), 300);
+            }
+        });
+
+        // Kutulara tıklayınca input'a focus
+        codeDisplay.addEventListener('click', () => codeInput.focus());
+
+        // Focus/blur
+        codeInput.addEventListener('focus', updateBoxes);
+        codeInput.addEventListener('blur', () => {
+            boxes.forEach(box => box.classList.remove('active'));
+        });
+
+        // Enter tuşu
+        codeInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                verifyCode();
+            }
+        });
+
+        // İlk focus
+        codeInput.focus();
+        updateBoxes();
+
+        // ============================================
+        // ALERT
+        // ============================================
+        function showAlert(message, type = 'error') {
+            if (!alertContainer) return;
+            const icons = { error: 'exclamation-circle', success: 'check-circle', info: 'info-circle' };
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type}">
+                    <i class="fas fa-${icons[type] || 'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+        }
+
+        // ============================================
+        // KOD DOĞRULAMA
+        // ============================================
+        async function verifyCode() {
+            const code = codeInput.value.replace(/\D/g, '');
+
+            if (code.length !== 6) {
+                showAlert('Lütfen 6 haneli kodu girin.', 'error');
+                return;
+            }
+
+            verifyBtn.disabled = true;
+            verifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Doğrulanıyor...';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/verify-email/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail, code: code })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // ✅ Başarılı
+                    localStorage.removeItem('pendingEmail');
+                    localStorage.removeItem('pendingVerification');
+
+                    if (data.token && data.user) {
+                        // Otomatik giriş
+                        localStorage.setItem('constructcycle_token', data.token);
+                        localStorage.setItem('constructcycle_user', JSON.stringify(data.user));
+
+                        document.getElementById('verification-form').style.display = 'none';
+                        document.getElementById('success-view').style.display = 'block';
+                        document.getElementById('successMessage').textContent =
+                            'Email doğrulandı! Dashboard\'a yönlendiriliyorsunuz...';
+
+                        setTimeout(() => {
+                            if (data.user.user_type === 'seller') {
+                                window.location.href = 'seller-dashboard.html';
+                            } else {
+                                window.location.href = 'buyer-dashboard.html';
+                            }
+                        }, 2000);
+                    } else {
+                        // Token yok, login'e yönlendir
+                        document.getElementById('verification-form').style.display = 'none';
+                        document.getElementById('success-view').style.display = 'block';
+                        document.getElementById('successMessage').textContent =
+                            'Email doğrulandı! Giriş sayfasına yönlendiriliyorsunuz...';
+
+                        setTimeout(() => {
+                            window.location.href = 'login.html';
+                        }, 2000);
+                    }
+
+                } else {
+                    // ❌ Hata
+                    let errorMsg = 'Doğrulama başarısız. Kodu kontrol edin.';
+                    if (data.message) errorMsg = data.message;
+                    else if (data.code) errorMsg = Array.isArray(data.code) ? data.code[0] : data.code;
+                    else if (data.email) errorMsg = Array.isArray(data.email) ? data.email[0] : data.email;
+                    else if (data.non_field_errors) errorMsg = Array.isArray(data.non_field_errors) ? data.non_field_errors[0] : data.non_field_errors;
+                    else if (data.errors) {
+                        const key = Object.keys(data.errors)[0];
+                        const val = data.errors[key];
+                        errorMsg = Array.isArray(val) ? val[0] : val;
+                    }
+
+                    showAlert(errorMsg, 'error');
+                    verifyBtn.disabled = false;
+                    verifyBtn.innerHTML = '<i class="fas fa-check-circle"></i> Doğrula';
+                    codeInput.value = '';
+                    updateBoxes();
+                    codeInput.focus();
+                }
+
+            } catch (error) {
+                console.error('Doğrulama hatası:', error);
+                showAlert('Sunucuya bağlanılamadı. Backend çalışıyor mu? (http://localhost:8000)', 'error');
+                verifyBtn.disabled = false;
+                verifyBtn.innerHTML = '<i class="fas fa-check-circle"></i> Doğrula';
+            }
+        }
+
+        // ============================================
+        // BUTON
+        // ============================================
+        verifyBtn.addEventListener('click', verifyCode);
+
+        // ============================================
+        // YENİDEN KOD GÖNDERME
+        // ============================================
+        let resendCooldown = 0;
+        let cooldownInterval;
+
+        function startCooldown() {
+            resendCooldown = 60;
+            resendBtn.disabled = true;
+            cooldownInterval = setInterval(() => {
+                resendCooldown--;
+                const timerEl = document.getElementById('timer');
+                if (timerEl) timerEl.textContent = `${resendCooldown} saniye sonra tekrar gönderebilirsiniz`;
+                if (resendCooldown <= 0) {
+                    clearInterval(cooldownInterval);
+                    resendBtn.disabled = false;
+                    if (timerEl) timerEl.textContent = '';
+                }
+            }, 1000);
+        }
+
+        resendBtn.addEventListener('click', async () => {
+            resendBtn.disabled = true;
+            showAlert('Yeni kod gönderiliyor...', 'info');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/resend-verification/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    showAlert('Yeni doğrulama kodu gönderildi! 📧', 'success');
+                    startCooldown();
+                    codeInput.value = '';
+                    updateBoxes();
+                    codeInput.focus();
+                } else {
+                    showAlert(data.message || 'Kod gönderilemedi.', 'error');
+                    resendBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Kod gönderme hatası:', error);
+                showAlert('Sunucuya bağlanılamadı.', 'error');
+                resendBtn.disabled = false;
+            }
+        });
+
+        // Sayfa açılışında cooldown başlat
+        startCooldown();
+
+    }); // DOMContentLoaded sonu
+    </script>
+</body>
+</html>

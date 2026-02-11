@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="ConstructCycle - Sürdürülebilir inşaat malzemesi pazaryeri. Fazla ve kullanılmamış inşaat malzemelerini alıp satın.">
+    <title>ConstructCycle - Sürdürülebilir İnşaat Malzemesi Pazaryeri</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/css/landing.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <i class="fas fa-recycle"></i>
+                    <span>ConstructCycle</span>
+                </div>
+
+                <div class="nav-links" id="navLinks">
+                    <a href="#home" class="nav-link active">Ana Sayfa</a>
+                    <a href="#features" class="nav-link">Özellikler</a>
+                    <a href="#how-it-works" class="nav-link">Nasıl Çalışır</a>
+                    <a href="#categories" class="nav-link">Kategoriler</a>
+                    <a href="#contact" class="nav-link">İletişim</a>
+                </div>
+
+                <div id="auth-area" class="header-actions">
+                    <!-- Dynamic Auth Content rendered by main.js -->
+                </div>
+
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-leaf"></i>
+                    <span>Sürdürülebilir İnşaat Ekonomisi</span>
+                </div>
+                <h1 class="hero-title">
+                    İnşaat Malzemelerini
+                    <span class="gradient-text">Yeniden Değerlendir</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Fazla ve kullanılmamış inşaat malzemelerini tek bir platformda al-sat.
+                    Hem çevreyi koru, hem bütçeni rahatla
+                </p>
+                <div class="hero-buttons">
+                    <a href="/api/v1/products/" class="btn btn-hero-primary">
+                        <i class="fas fa-search"></i>
+                        Ürünleri Keşfet
+                    </a>
+                    <a href="/api/v1/companies/register/" class="btn btn-hero-outline">
+                        <i class="fas fa-building"></i>
+                        Firma Olarak Katıl
+                    </a>
+                </div>
+
+                <!-- Stats -->
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="1250">0</div>
+                        <div class="stat-label">Aktif Ürün</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="340">0</div>
+                        <div class="stat-label">Firma</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="15000">0</div>
+                        <div class="stat-label">Ton CO₂ Tasarrufu</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            <div class="mouse"></div>
+            <span>Aşağı Kaydır</span>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Neden ConstructCycle?</span>
+                <h2 class="section-title">Sürdürülebilir Ticaretin Avantajları</h2>
+                <p class="section-subtitle">
+                    İnşaat sektörüne özel, stoktan pazara uzanan ekosistem
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon green">
+                        <i class="fas fa-recycle"></i>
+                    </div>
+                    <h3 class="feature-title">Atık Azaltma</h3>
+                    <p class="feature-desc">
+                        Fazla ve atıl stokları ekonomiye geri kazandırın.
+                        Kullanılabilir malzemelerin çöpe gitmesini önleyin.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon blue">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <h3 class="feature-title">Maliyet Avantajı</h3>
+                    <p class="feature-desc">
+                        Stoktaki ürünleri hızlıca nakde çevirin.
+                        Alıcılar piyasa fiyatının altında ürünlere ulaşsın.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon orange">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="feature-title">AI Destekli</h3>
+                    <p class="feature-desc">
+                        Yapay zeka destekli fiyat önerileri ve
+                        akıllı eşleştirme ile verimliliği artırın.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon purple">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <h3 class="feature-title">Stok Entegrasyonu</h3>
+                    <p class="feature-desc">
+                        Ürünler manuel tekrar girmeden stoktan ilana dönüşür.
+                        Operasyonel yük azalır.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon teal">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3 class="feature-title">Güvenli Ticaret</h3>
+                    <p class="feature-desc">
+                        Doğrulanmış firmalar, şeffaf fiyatlandırma ve
+                        güvenli ödeme sistemleri.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon red">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">Raporlama</h3>
+                    <p class="feature-desc">
+                        Satış analizi, talep gören ürünler ve
+                        stok fazlası önerileri ile karar verin.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Basit ve Hızlı</span>
+                <h2 class="section-title">Nasıl Çalışır?</h2>
+            </div>
+
+            <div class="steps-container">
+                <!-- Satıcı Steps -->
+                <div class="steps-column">
+                    <h3 class="steps-header">
+                        <i class="fas fa-building"></i>
+                        Satıcı İçin
+                    </h3>
+
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Firma Kaydı Oluştur</h4>
+                            <p>Vergi numaranız ile hızlıca firma kaydınızı tamamlayın</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Ürünleri Ekle</h4>
+                            <p>Stoktaki fazla malzemeleri sisteme ekleyin veya stok otomasyonundan aktarın</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Alıcılarla İletişime Geç</h4>
+                            <p>Mesajlaşma sistemi ile alıcılarla anlaşın</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Satışı Tamamla</h4>
+                            <p>Güvenli ödeme al ve ürünü teslim et</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alıcı Steps -->
+                <div class="steps-column">
+                    <h3 class="steps-header">
+                        <i class="fas fa-user"></i>
+                        Alıcı İçin
+                    </h3>
+
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Ürünleri Ara</h4>
+                            <p>İhtiyacınız olan malzemeyi kategori, şehir veya fiyat filtreleri ile bulun</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Detayları İncele</h4>
+                            <p>Ürün fotoğrafları, durum bilgisi ve satıcı detaylarını görün</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Satıcıyla İletişime Geç</h4>
+                            <p>Anlık mesajlaşma ile sorularınızı sorun</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Satın Al</h4>
+                            <p>Güvenli ödeme yap ve teslimatı bekle</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories" id="categories">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Ürün Kategorileri</span>
+                <h2 class="section-title">Ne Arıyorsanız Bulun</h2>
+            </div>
+
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-hammer"></i>
+                    </div>
+                    <h3>Metal ve Yapısal</h3>
+                    <p>Demir, çelik, profil</p>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <h3>Ahşap ve Doğrama</h3>
+                    <p>Kapı, pencere, ahşap</p>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-th-large"></i>
+                    </div>
+                    <h3>Zemin ve Kaplama</h3>
+                    <p>Seramik, fayans, parke</p>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Elektrik & Tesisat</h3>
+                    <p>Kablo, boru, vana</p>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-snowflake"></i>
+                    </div>
+                    <h3>Yalıtım</h3>
+                    <p>Isı, ses, su yalıtımı</p>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>Makine & Ekipman</h3>
+                    <p>İnşaat makineleri, aletler</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Hemen Başlayın</h2>
+                <p class="cta-subtitle">
+                    Sürdürülebilir inşaat ekonomisine bugün katılın
+                </p>
+                <div class="cta-buttons">
+                    <a href="/register/" class="btn btn-cta-primary">
+                        <i class="fas fa-rocket"></i>
+                        Ücretsiz Kayıt Ol
+                    </a>
+                    <a href="/api/docs/" class="btn btn-cta-outline">
+                        <i class="fas fa-book"></i>
+                        API Dokümantasyonu
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <div class="footer-logo">
+                        <i class="fas fa-recycle"></i>
+                        <span>ConstructCycle</span>
+                    </div>
+                    <p class="footer-desc">
+                        Sürdürülebilir inşaat malzemesi pazaryeri.
+                        Türkiye'nin ilk inşaata özel geri dönüşüm platformu.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Hızlı Linkler</h4>
+                    <ul>
+                        <li><a href="#home">Ana Sayfa</a></li>
+                        <li><a href="#features">Özellikler</a></li>
+                        <li><a href="#how-it-works">Nasıl Çalışır</a></li>
+                        <li><a href="/api/docs/">API Dokümantasyonu</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Kategoriler</h4>
+                    <ul>
+                        <li><a href="/api/v1/products/?category=1">Metal ve Yapısal</a></li>
+                        <li><a href="/api/v1/products/?category=2">Ahşap ve Doğrama</a></li>
+                        <li><a href="/api/v1/products/?category=3">Zemin ve Kaplama</a></li>
+                        <li><a href="/api/v1/products/?category=4">Elektrik & Tesisat</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>İletişim</h4>
+                    <ul class="footer-contact">
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:info@constructcycle.com">info@constructcycle.com</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <a href="tel:+902121234567">+90 (212) 123 45 67</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>İstanbul, Türkiye</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 ConstructCycle. Tüm hakları saklıdır.</p>
+                <div class="footer-links">
+                    <a href="#">Gizlilik Politikası</a>
+                    <a href="#">Kullanım Şartları</a>
+                    <a href="#">Çerez Politikası</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- JavaScript -->
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/landing.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,504 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content %}
+<style>
+    .bulk-delete-container {
+        padding: 30px;
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+
+    .bulk-delete-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .bulk-delete-header h1 {
+        font-size: 1.5rem;
+        color: #1F2937;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .bulk-delete-header h1::before {
+        content: "🗑️";
+        font-size: 1.5rem;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .back-btn {
+        background: #6B7280;
+        color: white !important;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none !important;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .back-btn:hover {
+        background: #4B5563;
+        transform: translateY(-1px);
+    }
+
+    .delete-all-btn {
+        background: linear-gradient(135deg, #EF4444, #DC2626);
+        color: white !important;
+        padding: 12px 24px;
+        border-radius: 8px;
+        text-decoration: none !important;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 1rem;
+    }
+
+    .delete-all-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    .total-selected {
+        background: #FEE2E2;
+        color: #DC2626;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .messages-container {
+        margin-bottom: 20px;
+    }
+
+    .messages {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .messages li {
+        padding: 14px 20px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .messages li.success {
+        background: #D1FAE5;
+        color: #065F46;
+        border: 1px solid #10B981;
+    }
+
+    .messages li.success::before {
+        content: "✓";
+        font-weight: bold;
+    }
+
+    .messages li.warning {
+        background: #FEF3C7;
+        color: #92400E;
+        border: 1px solid #F59E0B;
+    }
+
+    .messages li.warning::before {
+        content: "⚠";
+    }
+
+    .messages li.error {
+        background: #FEE2E2;
+        color: #991B1B;
+        border: 1px solid #EF4444;
+    }
+
+    .messages li.error::before {
+        content: "✕";
+    }
+
+    /* Model Kartları */
+    .models-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .model-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        border: 1px solid #E5E7EB;
+    }
+
+    .model-card-header {
+        background: linear-gradient(135deg, #2A9D8F, #3DB4A6);
+        padding: 14px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .model-card-header:hover {
+        filter: brightness(1.05);
+    }
+
+    .model-card-header h3 {
+        color: white;
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .model-card-header .count-badge {
+        background: rgba(255,255,255,0.25);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .model-card-header .selected-badge {
+        background: #EF4444;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: none;
+    }
+
+    .model-card-header .selected-badge.show {
+        display: inline-block;
+    }
+
+    .model-card-header .toggle-icon {
+        color: white;
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+    }
+
+    .model-card.collapsed .toggle-icon {
+        transform: rotate(-90deg);
+    }
+
+    .model-card-body {
+        max-height: 400px;
+        overflow-y: auto;
+        transition: max-height 0.3s ease;
+    }
+
+    .model-card.collapsed .model-card-body {
+        max-height: 0;
+        overflow: hidden;
+    }
+
+    .model-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .model-table thead th {
+        background: #F9FAFB;
+        padding: 12px 16px;
+        text-align: left;
+        font-weight: 600;
+        color: #374151;
+        border-bottom: 2px solid #E5E7EB;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .model-table thead th:first-child {
+        width: 60px;
+        text-align: center;
+    }
+
+    .model-table tbody tr {
+        transition: all 0.15s ease;
+    }
+
+    .model-table tbody tr:nth-child(even) {
+        background: #F9FAFB;
+    }
+
+    .model-table tbody tr:hover {
+        background: #FEF2F2;
+    }
+
+    .model-table tbody tr.selected {
+        background: #FEE2E2 !important;
+    }
+
+    .model-table tbody td {
+        padding: 12px 16px;
+        border-bottom: 1px solid #E5E7EB;
+        color: #374151;
+        font-size: 0.9rem;
+    }
+
+    .model-table tbody td:first-child {
+        text-align: center;
+    }
+
+    .model-table tbody td input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        accent-color: #EF4444;
+    }
+
+    .select-all-row {
+        background: #FEF2F2 !important;
+    }
+
+    .select-all-row td {
+        padding: 10px 16px !important;
+        font-weight: 600;
+        color: #DC2626;
+    }
+
+    .empty-model {
+        padding: 30px;
+        text-align: center;
+        color: #9CA3AF;
+        font-style: italic;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .bulk-delete-container {
+            padding: 15px;
+        }
+
+        .bulk-delete-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .header-actions {
+            width: 100%;
+            flex-direction: column;
+        }
+
+        .delete-all-btn, .back-btn, .total-selected {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="bulk-delete-container">
+    {% if messages %}
+    <div class="messages-container">
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <form method="post" id="bulk-delete-form">
+        {% csrf_token %}
+
+        <div class="bulk-delete-header">
+            <h1>Toplu Silme - Tüm Modeller</h1>
+            <div class="header-actions">
+                <span class="total-selected">
+                    Toplam: <span id="total-selected-count">0</span> kayıt seçildi
+                </span>
+                <button type="submit" class="delete-all-btn" onclick="return confirmDelete()">
+                    🗑️ Seçilileri Sil
+                </button>
+                <a href="{% url 'admin:index' %}" class="back-btn">← Geri Dön</a>
+            </div>
+        </div>
+
+        <div class="models-grid">
+            {% for model_data in all_models_data %}
+            <div class="model-card" data-model="{{ model_data.checkbox_name }}">
+                <div class="model-card-header" onclick="toggleCard(this)">
+                    <h3>
+                        {{ model_data.verbose_name_plural }}
+                        <span class="count-badge">{{ model_data.count }} kayıt</span>
+                        <span class="selected-badge" id="badge-{{ model_data.checkbox_name }}">0 seçili</span>
+                    </h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="model-card-body">
+                    {% if model_data.rows %}
+                    <table class="model-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" class="select-all-model" data-model="{{ model_data.checkbox_name }}" title="Tümünü Seç">
+                                </th>
+                                {% for header in model_data.headers %}
+                                <th>{{ header }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in model_data.rows %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="{{ model_data.checkbox_name }}" value="{{ row.id }}" class="item-checkbox" data-model="{{ model_data.checkbox_name }}">
+                                </td>
+                                {% for field in row.fields %}
+                                <td>{{ field|default:"-" }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div class="empty-model">Bu modelde kayıt bulunmuyor</div>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="model-card">
+                <div class="empty-model">Hiç model bulunamadı</div>
+            </div>
+            {% endfor %}
+        </div>
+    </form>
+</div>
+
+<script>
+// Kart aç/kapa
+function toggleCard(header) {
+    const card = header.closest('.model-card');
+    card.classList.toggle('collapsed');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const totalCountSpan = document.getElementById('total-selected-count');
+
+    // Toplam seçili sayısını güncelle
+    function updateTotalCount() {
+        const allChecked = document.querySelectorAll('.item-checkbox:checked');
+        totalCountSpan.textContent = allChecked.length;
+
+        // Her model için badge güncelle
+        document.querySelectorAll('.model-card').forEach(function(card) {
+            const modelName = card.dataset.model;
+            const checkedInModel = card.querySelectorAll('.item-checkbox:checked').length;
+            const badge = document.getElementById('badge-' + modelName);
+
+            if (badge) {
+                badge.textContent = checkedInModel + ' seçili';
+                if (checkedInModel > 0) {
+                    badge.classList.add('show');
+                } else {
+                    badge.classList.remove('show');
+                }
+            }
+        });
+    }
+
+    // Satır vurgulama
+    function updateRowHighlight() {
+        document.querySelectorAll('.item-checkbox').forEach(function(cb) {
+            const row = cb.closest('tr');
+            if (cb.checked) {
+                row.classList.add('selected');
+            } else {
+                row.classList.remove('selected');
+            }
+        });
+    }
+
+    // Model bazlı tümünü seç
+    document.querySelectorAll('.select-all-model').forEach(function(selectAll) {
+        selectAll.addEventListener('change', function() {
+            const modelName = this.dataset.model;
+            const checkboxes = document.querySelectorAll('.item-checkbox[data-model="' + modelName + '"]');
+            checkboxes.forEach(function(cb) {
+                cb.checked = selectAll.checked;
+            });
+            updateTotalCount();
+            updateRowHighlight();
+        });
+    });
+
+    // Tek tek seçim
+    document.querySelectorAll('.item-checkbox').forEach(function(cb) {
+        cb.addEventListener('change', function() {
+            updateTotalCount();
+            updateRowHighlight();
+
+            // Model select-all durumunu güncelle
+            const modelName = this.dataset.model;
+            const allInModel = document.querySelectorAll('.item-checkbox[data-model="' + modelName + '"]');
+            const checkedInModel = document.querySelectorAll('.item-checkbox[data-model="' + modelName + '"]:checked');
+            const selectAll = document.querySelector('.select-all-model[data-model="' + modelName + '"]');
+
+            if (selectAll) {
+                selectAll.checked = allInModel.length === checkedInModel.length && allInModel.length > 0;
+                selectAll.indeterminate = checkedInModel.length > 0 && checkedInModel.length < allInModel.length;
+            }
+        });
+    });
+
+    // Satıra tıklayınca checkbox değiştir
+    document.querySelectorAll('.model-table tbody tr').forEach(function(row) {
+        row.addEventListener('click', function(e) {
+            if (e.target.type !== 'checkbox') {
+                const checkbox = row.querySelector('.item-checkbox');
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event('change'));
+                }
+            }
+        });
+        row.style.cursor = 'pointer';
+    });
+
+    updateTotalCount();
+});
+
+function confirmDelete() {
+    const total = document.querySelectorAll('.item-checkbox:checked').length;
+    if (total === 0) {
+        alert('Silmek için en az bir kayıt seçmelisiniz.');
+        return false;
+    }
+    return confirm('Toplam ' + total + ' kayıt kalıcı olarak silinecek.\n\nBu işlem geri alınamaz. Emin misiniz?');
+}
+</script>
+{% endblock %}

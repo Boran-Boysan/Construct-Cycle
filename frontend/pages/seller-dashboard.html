@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satıcı Paneli - ConstructCycle</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="seller-dashboard">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="/" class="logo">🏗️ ConstructCycle</a>
+            <nav class="nav">
+                <a href="/my-products.html">Ürünlerim</a>
+                <a href="/my-sales.html">Satışlarım</a>
+                <a href="/add-product.html">Ürün Ekle</a>
+                <a href="/profile.html">Profilim</a>
+            </nav>
+            <button onclick="Auth.logout()" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Çıkış
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>👋 Hoş Geldiniz, <span id="user-name">Satıcı</span>!</h1>
+                <p>Satıcı Paneliniz</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-info">
+                        <h3 id="total-products">0</h3>
+                        <p>Aktif Ürün</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-info">
+                        <h3 id="total-sales">0 ₺</h3>
+                        <p>Toplam Satış</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-info">
+                        <h3 id="pending-sales">0</h3>
+                        <p>Bekleyen Sipariş</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-info">
+                        <h3 id="rating">0.0</h3>
+                        <p>Satıcı Puanı</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h2>Hızlı İşlemler</h2>
+                <div class="action-buttons">
+                    <a href="/add-product.html" class="action-btn primary">
+                        <i class="fas fa-plus"></i>
+                        <span>Yeni Ürün Ekle</span>
+                    </a>
+                    <a href="/my-products.html" class="action-btn">
+                        <i class="fas fa-box"></i>
+                        <span>Ürünlerim</span>
+                    </a>
+                    <a href="/my-sales.html" class="action-btn">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Satış Raporları</span>
+                    </a>
+                    <a href="/my-company.html" class="action-btn">
+                        <i class="fas fa-building"></i>
+                        <span>Firma Bilgileri</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Recent Sales -->
+            <div class="recent-section">
+                <h2>Son Satışlar</h2>
+                <div id="recent-sales-list">
+                    <div class="empty-state">
+                        <i class="fas fa-chart-line"></i>
+                        <p>Henüz hiç satış yapmadınız.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript Files -->
+    <script src="../js/main.js"></script>
+    <script src="../js/seller-dashboard.js"></script>
+</body>
+</html>

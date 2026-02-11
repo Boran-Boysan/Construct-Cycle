@@ -1,0 +1,335 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content %}
+<style>
+    #content-main {
+        display: grid;
+        grid-template-columns: 1fr 350px;
+        gap: 30px;
+        padding: 30px;
+    }
+
+    @media (max-width: 1024px) {
+        #content-main {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .app-modules {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Üst Toolbar */
+    .admin-toolbar {
+        background: white;
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        border: 1px solid #E5E7EB;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .admin-toolbar h2 {
+        margin: 0;
+        font-size: 1.25rem;
+        color: #1F2937;
+    }
+
+    .bulk-delete-link {
+        background: linear-gradient(135deg, #EF4444, #DC2626);
+        color: white !important;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none !important;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .bulk-delete-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    .module {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        border: 1px solid #E5E7EB;
+    }
+
+    .module caption {
+        background: linear-gradient(135deg, #2A9D8F, #3DB4A6);
+        color: white;
+        padding: 14px 18px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-align: left;
+    }
+
+    .module table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .module th {
+        padding: 14px 18px;
+        text-align: left;
+        border-bottom: 1px solid #E5E7EB;
+        background: #F9FAFB;
+    }
+
+    .module th a {
+        color: #1F2937;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    .module th a:hover {
+        color: #FF6B35;
+    }
+
+    .module td {
+        padding: 14px 18px;
+        text-align: right;
+        border-bottom: 1px solid #F3F4F6;
+        white-space: nowrap;
+    }
+
+    .module tr:last-child td,
+    .module tr:last-child th {
+        border-bottom: none;
+    }
+
+    .module tr:hover {
+        background: #F9FAFB;
+    }
+
+    .action-links {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+    }
+
+    .action-link {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: all 0.2s ease;
+    }
+
+    .action-link.add {
+        background: #10B981;
+        color: white;
+    }
+
+    .action-link.add:hover {
+        background: #0EA472;
+        transform: translateY(-1px);
+    }
+
+    .action-link.change {
+        background: #3B82F6;
+        color: white;
+    }
+
+    .action-link.change:hover {
+        background: #2563EB;
+        transform: translateY(-1px);
+    }
+
+    #recent-actions-module {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        border: 1px solid #E5E7EB;
+        height: fit-content;
+        position: sticky;
+        top: 90px;
+    }
+
+    #recent-actions-module h2 {
+        background: linear-gradient(135deg, #2A9D8F, #3DB4A6);
+        color: white;
+        padding: 14px 18px;
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+    }
+
+    #recent-actions-module .module-content {
+        padding: 18px;
+    }
+
+    .actionlist {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .actionlist li {
+        padding: 12px 0;
+        border-bottom: 1px solid #F3F4F6;
+        font-size: 0.9rem;
+    }
+
+    .actionlist li:last-child {
+        border-bottom: none;
+    }
+
+    .actionlist a {
+        color: #FF6B35;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .actionlist a:hover {
+        text-decoration: underline;
+    }
+
+    .actionlist .mini {
+        color: #6B7280;
+        font-size: 0.8rem;
+    }
+
+    .actionlist .addlink {
+        color: #10B981;
+    }
+
+    .actionlist .changelink {
+        color: #3B82F6;
+    }
+
+    .actionlist .deletelink {
+        color: #EF4444;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 30px;
+        color: #6B7280;
+    }
+
+    .empty-state p {
+        margin: 0;
+    }
+</style>
+
+<div id="content-main">
+    <div class="app-modules">
+        <!-- Üst Toolbar - Toplu Silme Butonu -->
+        <div class="admin-toolbar">
+            <h2>Yönetim Paneli</h2>
+            <a href="{% url 'admin_bulk_delete_all' %}" class="bulk-delete-link">
+                🗑️ Toplu Silme
+            </a>
+        </div>
+
+        {% if app_list %}
+            {% for app in app_list %}
+            <div class="module">
+                <table>
+                    <caption>
+                        {% if app.app_url %}
+                        <a href="{{ app.app_url }}" style="color: inherit; text-decoration: none;">{{ app.name }}</a>
+                        {% else %}
+                        {{ app.name }}
+                        {% endif %}
+                    </caption>
+                    {% for model in app.models %}
+                    <tr>
+                        <th>
+                            {% if model.admin_url %}
+                            <a href="{{ model.admin_url }}">{{ model.name }}</a>
+                            {% else %}
+                            {{ model.name }}
+                            {% endif %}
+                        </th>
+                        <td>
+                            <div class="action-links">
+                                {% if model.add_url %}
+                                <a href="{{ model.add_url }}" class="action-link add" title="{{ model.name }} Ekle">
+                                    + Ekle
+                                </a>
+                                {% endif %}
+                                {% if model.admin_url %}
+                                <a href="{{ model.admin_url }}" class="action-link change" title="{{ model.name }} Düzenle">
+                                    ✎ Düzenle
+                                </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="module">
+            <div class="empty-state">
+                <p>{% trans "You don't have permission to view or edit anything." %}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div id="recent-actions-module">
+        <h2>{% trans 'Son eylemler' %}</h2>
+        <div class="module-content">
+            {% load log %}
+            {% get_admin_log 10 as admin_log for_user user %}
+            {% if admin_log %}
+            <ul class="actionlist">
+                {% for entry in admin_log %}
+                <li>
+                    {% if entry.is_addition %}
+                    <a href="{{ entry.get_admin_url }}" class="addlink">{{ entry.object_repr }}</a>
+                    {% elif entry.is_change %}
+                    <a href="{{ entry.get_admin_url }}" class="changelink">{{ entry.object_repr }}</a>
+                    {% elif entry.is_deletion %}
+                    <span class="deletelink">{{ entry.object_repr }}</span>
+                    {% endif %}
+                    <br>
+                    <span class="mini">
+                        {% if entry.content_type %}
+                            {{ entry.content_type.name }}
+                        {% else %}
+                            {% trans 'Unknown content' %}
+                        {% endif %}
+                        -
+                        {% if entry.is_addition %}{% trans 'Eklendi' %}
+                        {% elif entry.is_change %}{% trans 'Değiştirildi' %}
+                        {% elif entry.is_deletion %}{% trans 'Silindi' %}
+                        {% endif %}
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <div class="empty-state">
+                <p><strong>Eylemlerim</strong></p>
+                <p>{% trans 'Mevcut değil' %}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

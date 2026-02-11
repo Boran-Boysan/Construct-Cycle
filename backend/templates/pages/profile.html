@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profilim - ConstructCycle</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="/static/css/login.css">
+    <link rel="stylesheet" href="/static/css/login.css">
+    <link rel="stylesheet" href="/static/css/profile.css">
+</head>
+
+<body style="background-color: #f3f4f6;">
+
+    <div class="navbar-shim">
+        <a href="/" class="btn btn-primary" style="padding: 10px 20px;">
+            <i class="fas fa-arrow-left"></i> Ana Sayfa
+        </a>
+    </div>
+
+    <div class="profile-container">
+        <div class="profile-card" id="profile-card" style="display: none;">
+            <div class="profile-header">
+                <div class="profile-avatar" id="profile-avatar">U</div>
+                <h1 class="profile-name" id="display-name">Yükleniyor...</h1>
+                <span class="profile-type" id="user-type">Kullanıcı</span>
+            </div>
+
+            <div class="profile-body">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">E-posta Adresi</span>
+                        <div class="info-value" id="profile-email">---</div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Telefon Numarası</span>
+                        <div class="info-value" id="profile-phone">---</div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Kullanıcı ID</span>
+                        <div class="info-value" id="profile-id">---</div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Kayıt Tarihi</span>
+                        <div class="info-value" id="profile-date">---</div>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button class="btn btn-outline" onclick="ConstructCycle.Auth.logout()">
+                        <i class="fas fa-sign-out-alt"></i> Çıkış Yap
+                    </button>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-edit"></i> Profili Düzenle
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="loading">
+            <i class="fas fa-spinner fa-spin fa-3x"></i>
+            <p>Profil bilgileri yükleniyor...</p>
+        </div>
+
+        <div id="error-screen">
+            <i class="fas fa-exclamation-circle fa-3x"></i>
+            <h3>Profil yüklenemedi</h3>
+            <p>Lütfen tekrar giriş yapmayı deneyin.</p>
+            <a href="/login/" class="btn btn-primary">Giriş Yap</a>
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="/static/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check auth immediately
+            const Auth = ConstructCycle.Auth;
+            if (!Auth.isLoggedIn()) {
+                window.location.href = '/login/';
+                return;
+            }
+
+            try {
+                // Fetch profile
+                const user = await Auth.getProfile();
+
+                // Update UI
+                const firstName = user.first_name || '';
+                const lastName = user.last_name || '';
+                const initials = (firstName[0] || user.email[0] || '?').toUpperCase();
+
+                document.getElementById('profile-avatar').textContent = initials;
+                document.getElementById('display-name').textContent = `${firstName} ${lastName}`.trim() || user.email;
+                document.getElementById('user-type').textContent = user.user_type === 'buyer' ? 'Alıcı' : (user.user_type === 'seller' ? 'Satıcı' : 'Yönetici');
+
+                document.getElementById('profile-email').textContent = user.email;
+                document.getElementById('profile-phone').textContent = user.phone || 'Belirtilmedi';
+                document.getElementById('profile-id').textContent = '#' + user.id;
+
+                // Date formatting if available (assuming 'date_joined' or similar field)
+                if (user.date_joined) {
+                    const date = new Date(user.date_joined);
+                    document.getElementById('profile-date').textContent = date.toLocaleDateString('tr-TR');
+                } else {
+                    document.getElementById('profile-date').textContent = 'Bilinmiyor';
+                }
+
+                // Show card
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('profile-card').style.display = 'block';
+
+            } catch (error) {
+                console.error('Profile load error:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error-screen').style.display = 'block';
+
+                // If 401, force logout
+                if (error.status === 401) {
+                    setTimeout(() => Auth.logout(), 2000);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tüm İlanlar - ConstructCycle</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/main.css">
+
+    <style>
+        .products-page { display: grid; grid-template-columns: 280px 1fr; gap: 32px; padding: 32px 0; }
+        .filters-sidebar { background: var(--bg-primary); border-radius: var(--radius-lg); padding: 24px; height: fit-content; position: sticky; top: calc(var(--header-height) + 20px); border: 1px solid var(--gray-200); }
+        .filters-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--gray-200); }
+        .filters-header h3 { font-size: 1.1rem; font-weight: 600; }
+        .clear-filters { color: var(--primary); font-size: 0.85rem; cursor: pointer; }
+        .filter-group { margin-bottom: 24px; }
+        .filter-group h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 12px; color: var(--text-primary); }
+        .filter-options { display: flex; flex-direction: column; gap: 8px; }
+        .filter-option { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: var(--radius-md); cursor: pointer; transition: var(--transition-fast); }
+        .filter-option:hover { background: var(--gray-100); }
+        .filter-option input { accent-color: var(--primary); }
+        .filter-option span { flex: 1; cursor: pointer; font-size: 0.9rem; color: var(--text-secondary); }
+        .price-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .price-input { position: relative; }
+        .price-input input { width: 100%; padding: 10px 12px; padding-right: 30px; border: 1px solid var(--gray-300); border-radius: var(--radius-md); font-size: 0.9rem; }
+        .price-input span { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.8rem; }
+        .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+        .results-count { font-size: 0.95rem; color: var(--text-secondary); }
+        .results-count strong { color: var(--text-primary); }
+        .results-actions { display: flex; align-items: center; gap: 12px; }
+        .view-toggle { display: flex; background: var(--gray-100); border-radius: var(--radius-md); padding: 4px; }
+        .view-toggle button { padding: 8px 12px; border-radius: var(--radius-sm); color: var(--text-muted); transition: var(--transition-fast); }
+        .view-toggle button.active { background: var(--bg-primary); color: var(--text-primary); box-shadow: var(--shadow-sm); }
+        .pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 40px; }
+        .pagination-btn { padding: 10px 16px; border: 1px solid var(--gray-300); border-radius: var(--radius-md); color: var(--text-primary); font-weight: 500; transition: var(--transition-fast); }
+        .pagination-btn:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
+        .pagination-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .pagination-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
+        .mobile-filter-btn { display: none; width: 100%; margin-bottom: 16px; }
+        @media (max-width: 1024px) {
+            .products-page { grid-template-columns: 1fr; }
+            .filters-sidebar { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1001; border-radius: 0; overflow-y: auto; }
+            .filters-sidebar.active { display: block; }
+            .mobile-filter-btn { display: flex; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="../index.html" class="logo">
+                    <div class="logo-icon"><i class="fas fa-recycle"></i></div>
+                    <span>ConstructCycle</span>
+                </a>
+
+                <form class="search-bar" id="search-form">
+                    <div class="search-bar-inner">
+                        <input type="text" placeholder="İnşaat malzemesi ara..." name="search" id="search-input">
+                        <button type="submit" class="search-bar-btn"><i class="fas fa-search"></i></button>
+                    </div>
+                </form>
+
+                <div class="header-actions">
+                    <a href="login.html" class="header-btn outline">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Giriş Yap</span>
+                    </a>
+                    <a href="register.html" class="header-btn primary">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Kayıt Ol</span>
+                    </a>
+                </div>
+
+                <button class="mobile-menu-btn" id="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <nav style="padding: 20px 0; color: var(--text-muted); font-size: 0.9rem;">
+                <a href="../index.html" style="color: var(--text-muted);">Ana Sayfa</a>
+                <i class="fas fa-chevron-right" style="margin: 0 8px; font-size: 0.7rem;"></i>
+                <span id="breadcrumb-current">Tüm İlanlar</span>
+            </nav>
+
+            <button class="btn btn-outline mobile-filter-btn" onclick="toggleFilters()">
+                <i class="fas fa-filter"></i> Filtreler
+            </button>
+
+            <div class="products-page">
+                <aside class="filters-sidebar" id="filters-sidebar">
+                    <div class="filters-header">
+                        <h3><i class="fas fa-filter"></i> Filtreler</h3>
+                        <span class="clear-filters" onclick="clearFilters()">Temizle</span>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Kategori</h4>
+                        <div class="filter-options" id="category-filters"></div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Şehir</h4>
+                        <select class="form-input" id="filter-city" onchange="applyFilters()">
+                            <option value="">Tüm Şehirler</option>
+                            <option value="İstanbul">İstanbul</option>
+                            <option value="Ankara">Ankara</option>
+                            <option value="İzmir">İzmir</option>
+                            <option value="Bursa">Bursa</option>
+                            <option value="Antalya">Antalya</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Ürün Durumu</h4>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" name="condition" value="0" onchange="applyFilters()">
+                                <span>Sıfır / Kullanılmamış</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="condition" value="1" onchange="applyFilters()">
+                                <span>Az Kullanılmış</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" name="condition" value="2" onchange="applyFilters()">
+                                <span>Kullanılmış</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Fiyat Aralığı</h4>
+                        <div class="price-inputs">
+                            <div class="price-input">
+                                <input type="number" id="min-price" placeholder="Min" onchange="applyFilters()">
+                                <span>₺</span>
+                            </div>
+                            <div class="price-input">
+                                <input type="number" id="max-price" placeholder="Max" onchange="applyFilters()">
+                                <span>₺</span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="products-area">
+                    <div class="results-header">
+                        <p class="results-count"><strong id="results-count">0</strong> ilan bulundu</p>
+                        <div class="results-actions">
+                            <select class="filter-select" id="sort-select" onchange="applyFilters()">
+                                <option value="-created_at">En Yeni</option>
+                                <option value="created_at">En Eski</option>
+                                <option value="sale_price">Fiyat (Düşük)</option>
+                                <option value="-sale_price">Fiyat (Yüksek)</option>
+                            </select>
+                            <div class="view-toggle">
+                                <button class="active" onclick="setView('grid')" id="view-grid"><i class="fas fa-th-large"></i></button>
+                                <button onclick="setView('list')" id="view-list"><i class="fas fa-list"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-grid" id="product-grid">
+                        <div class="loading-placeholder">
+                            <div class="loading-spinner"></div>
+                            <p>Ürünler yükleniyor...</p>
+                        </div>
+                    </div>
+
+                    <div class="pagination" id="pagination"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+                <p>© 2024 ConstructCycle. Tüm hakları saklıdır.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        let currentPage = 1, totalPages = 1, currentView = 'grid', categories = [];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            parseUrlParams();
+            await loadCategories();
+            await loadProducts();
+        });
+
+        function parseUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('search')) document.getElementById('search-input').value = params.get('search');
+            if (params.get('category')) window.initialCategory = params.get('category');
+            if (params.get('city')) document.getElementById('filter-city').value = params.get('city');
+        }
+
+        async function loadCategories() {
+            try {
+                const response = await Categories.getAll();
+                categories = response;
+                document.getElementById('category-filters').innerHTML = categories.map(cat => `
+                    <label class="filter-option">
+                        <input type="radio" name="category" value="${cat.id}" ${window.initialCategory == cat.id ? 'checked' : ''} onchange="applyFilters()">
+                        <span>${cat.name}</span>
+                    </label>
+                `).join('');
+            } catch (e) { console.error('Categories error:', e); }
+        }
+
+        async function loadProducts() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '<div class="loading-placeholder"><div class="loading-spinner"></div><p>Ürünler yükleniyor...</p></div>';
+            try {
+                const params = getFilterParams();
+                params.page = currentPage;
+                const response = await Products.getAll(params);
+                const products = response.results || response;
+                document.getElementById('results-count').textContent = response.count || products.length;
+                totalPages = Math.ceil((response.count || products.length) / 20);
+
+                if (products.length === 0) {
+                    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><h3>Sonuç bulunamadı</h3><button class="btn btn-primary" onclick="clearFilters()">Filtreleri Temizle</button></div>';
+                    return;
+                }
+                grid.innerHTML = '';
+                grid.className = currentView === 'list' ? 'product-list' : 'product-grid';
+                products.forEach(p => grid.appendChild(createProductCard(p)));
+                renderPagination();
+            } catch (e) { console.error('Products error:', e); grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><h3>Hata oluştu</h3></div>'; }
+        }
+
+        function getFilterParams() {
+            const params = {};
+            const search = document.getElementById('search-input').value.trim();
+            if (search) params.search = search;
+            const cat = document.querySelector('input[name="category"]:checked');
+            if (cat) params.category = cat.value;
+            const city = document.getElementById('filter-city').value;
+            if (city) params.city = city;
+            document.querySelectorAll('input[name="condition"]:checked').forEach(cb => params.condition = cb.value);
+            if (document.getElementById('min-price').value) params.min_price = document.getElementById('min-price').value;
+            if (document.getElementById('max-price').value) params.max_price = document.getElementById('max-price').value;
+            params.ordering = document.getElementById('sort-select').value;
+            return params;
+        }
+
+        function applyFilters() { currentPage = 1; loadProducts(); }
+        function clearFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('filter-city').value = '';
+            document.getElementById('min-price').value = '';
+            document.getElementById('max-price').value = '';
+            document.querySelectorAll('input[name="category"], input[name="condition"]').forEach(cb => cb.checked = false);
+            currentPage = 1;
+            loadProducts();
+        }
+
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.onclick = () => window.location.href = `products-detail.html?id=${product.id}`;
+            const img = product.primary_image || '../assets/images/placeholder.jpg';
+            card.innerHTML = `
+                <div class="product-card-image">
+                    <img src="${img}" alt="${product.name}" onerror="this.src='../assets/images/placeholder.jpg'">
+                    <div class="product-card-badges">${product.condition === 0 ? '<span class="product-badge new">Sıfır</span>' : ''}</div>
+                    <button class="product-favorite" onclick="event.stopPropagation();"><i class="far fa-heart"></i></button>
+                </div>
+                <div class="product-card-content">
+                    <div class="product-price">${UI.formatPrice(product.sale_price)}</div>
+                    <h3 class="product-title">${product.name}</h3>
+                    <div class="product-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> ${product.city}</span>
+                        <span><i class="fas fa-clock"></i> ${UI.relativeTime(product.created_at)}</span>
+                    </div>
+                </div>
+                <div class="product-card-footer">
+                    <div class="product-seller"><span>${product.company_name || 'Firma'}</span></div>
+                </div>`;
+            return card;
+        }
+
+        function renderPagination() {
+            const c = document.getElementById('pagination');
+            if (totalPages <= 1) { c.innerHTML = ''; return; }
+            let h = `<button class="pagination-btn" onclick="goToPage(${currentPage-1})" ${currentPage===1?'disabled':''}><i class="fas fa-chevron-left"></i></button>`;
+            for (let i = 1; i <= totalPages; i++) h += `<button class="pagination-btn ${i===currentPage?'active':''}" onclick="goToPage(${i})">${i}</button>`;
+            h += `<button class="pagination-btn" onclick="goToPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}><i class="fas fa-chevron-right"></i></button>`;
+            c.innerHTML = h;
+        }
+
+        function goToPage(p) { if (p < 1 || p > totalPages) return; currentPage = p; loadProducts(); window.scrollTo({top:0,behavior:'smooth'}); }
+        function setView(v) { currentView = v; document.getElementById('view-grid').classList.toggle('active', v==='grid'); document.getElementById('view-list').classList.toggle('active', v==='list'); document.getElementById('product-grid').className = v==='list'?'product-list':'product-grid'; }
+        function toggleFilters() { document.getElementById('filters-sidebar').classList.toggle('active'); }
+        document.getElementById('search-form').addEventListener('submit', e => { e.preventDefault(); applyFilters(); });
+    </script>
+</body>
+</html>

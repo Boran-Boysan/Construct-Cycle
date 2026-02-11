@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol - ConstructCycle</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; }
+
+        /* Auth Page Layout */
+        .auth-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #264653 0%, #2A9D8F 100%);
+            padding: 40px 20px;
+        }
+        .auth-container { width: 100%; max-width: 420px; }
+        .auth-container.register { max-width: 500px; }
+        .auth-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        /* Auth Header */
+        .auth-header { text-align: center; margin-bottom: 32px; }
+        .auth-header .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #264653;
+            text-decoration: none;
+            margin-bottom: 24px;
+        }
+        .auth-header .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #FF6B35, #2A9D8F);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+        .auth-header h1 { font-size: 1.75rem; color: #111827; margin-bottom: 8px; }
+        .auth-header p { color: #6b7280; font-size: 0.95rem; }
+
+        /* User Type Selector */
+        .user-type-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+        .user-type-option {
+            padding: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .user-type-option:hover { border-color: #d1d5db; }
+        .user-type-option.selected { border-color: #FF6B35; background: rgba(255, 107, 53, 0.05); }
+        .user-type-option i { font-size: 2rem; color: #FF6B35; margin-bottom: 8px; display: block; }
+        .user-type-option h4 { font-size: 1rem; color: #111827; margin-bottom: 4px; }
+        .user-type-option p { font-size: 0.8rem; color: #6b7280; margin: 0; }
+
+        /* Form Elements */
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-weight: 500; color: #374151; margin-bottom: 8px; font-size: 0.9rem; }
+        .form-label .required { color: #dc2626; }
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #f9fafb;
+            font-family: inherit;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #FF6B35;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+        }
+        .form-input::placeholder { color: #9ca3af; }
+        .form-input-icon { position: relative; }
+        .form-input-icon > i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            z-index: 1;
+        }
+        .form-input-icon .form-input { padding-left: 46px; }
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .toggle-password:hover { color: #6b7280; }
+        .form-help { font-size: 0.8rem; color: #6b7280; margin-top: 6px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+        /* Checkbox */
+        .form-checkbox { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 20px; }
+        .form-checkbox input { width: 18px; height: 18px; accent-color: #FF6B35; margin-top: 2px; cursor: pointer; }
+        .form-checkbox label { font-size: 0.85rem; color: #6b7280; cursor: pointer; line-height: 1.4; }
+        .form-checkbox label a { color: #FF6B35; text-decoration: none; }
+        .form-checkbox label a:hover { text-decoration: underline; }
+
+        /* Password Strength */
+        .password-strength { margin-top: 8px; }
+        .password-strength-bar { height: 4px; background: #e5e7eb; border-radius: 2px; overflow: hidden; }
+        .password-strength-fill { height: 100%; width: 0; transition: all 0.3s; }
+        .password-strength-text { font-size: 0.75rem; margin-top: 4px; color: #6b7280; display: block; }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            text-decoration: none;
+            font-family: inherit;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #FF6B35, #e05a2b);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
+        }
+        .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+        .btn-block { width: 100%; }
+
+        /* Divider */
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            margin: 24px 0;
+            color: #9ca3af;
+            font-size: 0.85rem;
+        }
+        .auth-divider::before, .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e5e7eb;
+        }
+        .auth-divider::before { margin-right: 16px; }
+        .auth-divider::after { margin-left: 16px; }
+
+        /* Social Login */
+        .social-login { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            background: white;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+        .social-btn:hover { border-color: #d1d5db; background: #f9fafb; }
+        .social-btn .fa-google { color: #DB4437; }
+        .social-btn .fa-facebook { color: #4267B2; }
+
+        /* Footer */
+        .auth-footer {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+        .auth-footer a { color: #FF6B35; font-weight: 600; text-decoration: none; }
+        .auth-footer a:hover { text-decoration: underline; }
+
+        /* Alerts */
+        .alert {
+            padding: 14px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+        .alert-error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+        .alert-success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .auth-card { padding: 30px 24px; }
+            .social-login { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .user-type-selector { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-page">
+        <div class="auth-container register">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <a href="../index.html" class="logo">
+                        <div class="logo-icon"><i class="fas fa-recycle"></i></div>
+                        <span>ConstructCycle</span>
+                    </a>
+                    <h1>Hesap Oluşturun</h1>
+                    <p>Sürdürülebilir inşaat ticaretine katılın</p>
+                </div>
+
+                <div id="alert-container"></div>
+
+                <div class="user-type-selector">
+                    <div class="user-type-option selected" data-type="buyer" onclick="selectUserType('buyer')">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h4>Alıcı</h4>
+                        <p>Malzeme satın almak istiyorum</p>
+                    </div>
+                    <div class="user-type-option" data-type="seller" onclick="selectUserType('seller')">
+                        <i class="fas fa-store"></i>
+                        <h4>Satıcı</h4>
+                        <p>Malzeme satmak istiyorum</p>
+                    </div>
+                </div>
+
+                <form id="register-form">
+                    <input type="hidden" id="user_type" name="user_type" value="buyer">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="first_name">Ad <span class="required">*</span></label>
+                            <div class="form-input-icon">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="first_name" name="first_name" class="form-input" placeholder="Adınız" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="last_name">Soyad <span class="required">*</span></label>
+                            <div class="form-input-icon">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="last_name" name="last_name" class="form-input" placeholder="Soyadınız" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">E-posta Adresi <span class="required">*</span></label>
+                        <div class="form-input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" class="form-input" placeholder="ornek@email.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="phone">Telefon (Opsiyonel)</label>
+                        <div class="form-input-icon">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="phone" name="phone" class="form-input" placeholder="05XX XXX XX XX">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password">Şifre <span class="required">*</span></label>
+                        <div class="form-input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" class="form-input" placeholder="En az 8 karakter" required minlength="8">
+                            <button type="button" class="toggle-password" onclick="togglePassword('password')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-strength">
+                            <div class="password-strength-bar">
+                                <div class="password-strength-fill" id="password-strength-fill"></div>
+                            </div>
+                            <span class="password-strength-text" id="password-strength-text"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password_confirm">Şifre Tekrar <span class="required">*</span></label>
+                        <div class="form-input-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password_confirm" name="password_confirm" class="form-input" placeholder="Şifrenizi tekrar girin" required minlength="8">
+                            <button type="button" class="toggle-password" onclick="togglePassword('password_confirm')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-checkbox">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms"><a href="#">Kullanım şartlarını</a> okudum ve kabul ediyorum</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block" id="submit-btn">
+                        <span>Kayıt Ol</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+
+                <div class="auth-divider"><span>veya</span></div>
+
+                <div class="social-login">
+                    <button type="button" class="social-btn">
+                        <i class="fab fa-google"></i>
+                        <span>Google</span>
+                    </button>
+                    <button type="button" class="social-btn">
+                        <i class="fab fa-facebook"></i>
+                        <span>Facebook</span>
+                    </button>
+                </div>
+
+                <div class="auth-footer">
+                    <p>Zaten hesabınız var mı? <a href="login.html">Giriş Yap</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // API CONFIGURATION
+        // ============================================
+        const API_BASE_URL = 'http://localhost:8000/api/v1';
+
+        // Toggle password visibility
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const icon = field.parentNode.querySelector('.toggle-password i');
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Select user type
+        function selectUserType(type) {
+            document.querySelectorAll('.user-type-option').forEach(el => el.classList.remove('selected'));
+            document.querySelector(`[data-type="${type}"]`).classList.add('selected');
+            document.getElementById('user_type').value = type;
+        }
+
+        // Check password strength
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const fill = document.getElementById('password-strength-fill');
+            const text = document.getElementById('password-strength-text');
+
+            if (password.length === 0) {
+                fill.style.width = '0';
+                text.textContent = '';
+                return;
+            }
+
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+            if (strength <= 2) {
+                fill.style.width = '33%';
+                fill.style.background = '#dc2626';
+                text.textContent = 'Zayıf şifre';
+                text.style.color = '#dc2626';
+            } else if (strength <= 4) {
+                fill.style.width = '66%';
+                fill.style.background = '#f59e0b';
+                text.textContent = 'Orta güçlükte şifre';
+                text.style.color = '#f59e0b';
+            } else {
+                fill.style.width = '100%';
+                fill.style.background = '#10b981';
+                text.textContent = 'Güçlü şifre';
+                text.style.color = '#10b981';
+            }
+        }
+
+        // Show alert message
+        function showAlert(message, type = 'error') {
+            const container = document.getElementById('alert-container');
+            if (!container) return;
+            container.innerHTML = `
+                <div class="alert alert-${type}">
+                    <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            container.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Clear alerts
+        function clearAlerts() {
+            const container = document.getElementById('alert-container');
+            if (container) container.innerHTML = '';
+        }
+
+        // Validate email
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        // Add password strength listener
+        document.getElementById('password').addEventListener('input', checkPasswordStrength);
+
+        // ============================================
+        // REGISTER FORM - BACKEND API CALL
+        // ============================================
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearAlerts();
+
+            const submitBtn = document.getElementById('submit-btn');
+            const firstName = document.getElementById('first_name').value.trim();
+            const lastName = document.getElementById('last_name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone')?.value.trim() || '';
+            const password = document.getElementById('password').value;
+            const passwordConfirm = document.getElementById('password_confirm').value;
+            const userType = document.getElementById('user_type').value;
+            const terms = document.getElementById('terms').checked;
+
+            // Validation
+            if (!firstName || !lastName) {
+                showAlert('Lütfen adınızı ve soyadınızı girin.');
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                showAlert('Geçerli bir e-posta adresi girin.');
+                return;
+            }
+
+            if (password.length < 8) {
+                showAlert('Şifre en az 8 karakter olmalıdır.');
+                return;
+            }
+
+            if (password !== passwordConfirm) {
+                showAlert('Şifreler eşleşmiyor.');
+                return;
+            }
+
+            if (!terms) {
+                showAlert('Kullanım şartlarını kabul etmelisiniz.');
+                return;
+            }
+
+            // Loading state
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Kayıt yapılıyor...';
+
+            // Backend'e gönderilecek veri
+            const userData = {
+                first_name: firstName,
+                last_name: lastName,
+                email: email,
+                phone: phone,
+                password: password,
+                password_confirm: passwordConfirm,
+                user_type: userType
+            };
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/register/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    showAlert('Kayıt başarılı! Email adresinize doğrulama kodu gönderildi. 📧', 'success');
+
+                    localStorage.setItem('pendingEmail', email);
+                    localStorage.setItem('pendingVerification', 'true');
+
+                    setTimeout(() => {
+                        window.location.href = `verify-email.html?email=${encodeURIComponent(email)}`;
+                    }, 2000);
+
+                } else if (response.status === 400) {
+                    let errorMessage = data.message || 'Kayıt sırasında bir hata oluştu.';
+
+                    if (data.errors) {
+                        const errors = data.errors;
+                        const firstKey = Object.keys(errors)[0];
+                        const firstError = errors[firstKey];
+                        errorMessage = Array.isArray(firstError) ? firstError[0] : firstError;
+                    }
+
+                    if (errorMessage.includes('zaten') || errorMessage.includes('already')) {
+                        errorMessage = 'Bu email adresi zaten kayıtlı. Giriş yapmayı deneyin veya email doğrulaması yapın.';
+                        localStorage.setItem('pendingEmail', email);
+                        setTimeout(() => {
+                            window.location.href = `verify-email.html?email=${encodeURIComponent(email)}`;
+                        }, 3000);
+                    }
+
+                    showAlert(errorMessage, 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+
+                } else {
+                    showAlert(data.message || data.detail || 'Kayıt sırasında bir hata oluştu.', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+                }
+
+            } catch (error) {
+                console.error('Register error:', error);
+                showAlert('Sunucuya bağlanılamadı. Backend sunucusunun çalıştığından emin olun (http://localhost:8000).', 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
+        });
+    </script>
+</body>
+</html>

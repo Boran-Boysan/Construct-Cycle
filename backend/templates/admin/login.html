@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş Yap | ConstructCycle Yönetim Paneli</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #264653 0%, #2A9D8F 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 24px;
+            padding: 48px 40px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 420px;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #FF6B35, #2A9D8F);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #264653;
+        }
+
+        .welcome-text {
+            text-align: center;
+            color: #6B7280;
+            font-size: 1rem;
+            margin-bottom: 36px;
+        }
+
+        .error-message {
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 18px;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            color: #111827;
+            background: #F9FAFB;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #FF6B35;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: #9CA3AF;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px 28px;
+            background: linear-gradient(135deg, #FF6B35, #E55A2B);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 8px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .forgot-password a {
+            color: #FF6B35;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #E5E7EB;
+            color: #9CA3AF;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 36px 28px;
+                border-radius: 20px;
+            }
+
+            .logo-text {
+                font-size: 1.3rem;
+            }
+
+            .form-group input {
+                padding: 14px 16px;
+            }
+
+            .submit-btn {
+                padding: 14px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <div class="logo-icon">♻</div>
+            <span class="logo-text">ConstructCycle</span>
+        </div>
+
+        <p class="welcome-text">Yönetim Paneline Hoş Geldiniz</p>
+
+        {% if form.errors %}
+        <div class="error-message">
+            Geçersiz e-posta veya parola. Lütfen tekrar deneyin.
+        </div>
+        {% endif %}
+
+        <form action="{{ app_path }}" method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="id_username">E-posta</label>
+                <input type="text" name="username" id="id_username" placeholder="ornek@email.com" autofocus required>
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">Parola</label>
+                <input type="password" name="password" id="id_password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="submit-btn">Giriş Yap</button>
+
+            <input type="hidden" name="next" value="{{ next }}">
+        </form>
+
+        <div class="forgot-password">
+            <a href="#">Şifremi Unuttum</a>
+        </div>
+
+        <div class="footer-text">
+            © 2024 ConstructCycle - Sürdürülebilir İnşaat Pazaryeri
+        </div>
+    </div>
+</body>
+</html>

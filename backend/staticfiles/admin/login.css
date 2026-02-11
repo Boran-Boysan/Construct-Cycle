@@ -1,0 +1,296 @@
+/* ============================================
+   ConstructCycle Admin - Login Page Styles
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.login {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    background: linear-gradient(135deg, #264653 0%, #2A9D8F 100%) !important;
+    min-height: 100vh !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 40px 20px !important;
+}
+
+body.login #header {
+    display: none !important;
+}
+
+#container {
+    width: 100% !important;
+    max-width: 420px !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    min-width: auto !important;
+}
+
+#content {
+    background: white !important;
+    border-radius: 20px !important;
+    padding: 40px !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
+}
+
+#site-name {
+    text-align: center !important;
+    margin-bottom: 30px !important;
+}
+
+#site-name a {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    font-size: 1.5rem !important;
+    font-weight: 800 !important;
+    color: #264653 !important;
+    text-decoration: none !important;
+}
+
+#site-name a::before {
+    content: "♻" !important;
+    width: 45px !important;
+    height: 45px !important;
+    background: linear-gradient(135deg, #FF6B35, #2A9D8F) !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: white !important;
+    font-size: 1.25rem !important;
+}
+
+#content h1 {
+    text-align: center !important;
+    font-size: 1.75rem !important;
+    color: #111827 !important;
+    margin-bottom: 8px !important;
+    font-weight: 700 !important;
+}
+
+#content-main::before {
+    content: "Yönetim paneline hoş geldiniz" !important;
+    display: block !important;
+    text-align: center !important;
+    color: #6b7280 !important;
+    font-size: 0.95rem !important;
+    margin-bottom: 32px !important;
+}
+
+#login-form {
+    margin: 0 !important;
+}
+
+.form-row {
+    margin-bottom: 20px !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+.form-row label {
+    display: block !important;
+    font-weight: 500 !important;
+    color: #374151 !important;
+    margin-bottom: 8px !important;
+    font-size: 0.9rem !important;
+}
+
+.form-row input[type="text"],
+.form-row input[type="password"] {
+    width: 100% !important;
+    padding: 14px 16px !important;
+    border: 2px solid #e5e7eb !important;
+    border-radius: 10px !important;
+    font-size: 1rem !important;
+    transition: all 0.2s ease !important;
+    background: #f9fafb !important;
+    font-family: inherit !important;
+    color: #111827 !important;
+}
+
+.form-row input[type="text"]:focus,
+.form-row input[type="password"]:focus {
+    outline: none !important;
+    border-color: #FF6B35 !important;
+    background: white !important;
+    box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1) !important;
+}
+
+.form-row input[type="text"]::placeholder,
+.form-row input[type="password"]::placeholder {
+    color: #9ca3af !important;
+}
+
+.submit-row {
+    padding: 0 !important;
+    margin: 24px 0 0 0 !important;
+    border: none !important;
+    background: transparent !important;
+    text-align: center !important;
+}
+
+.submit-row input[type="submit"] {
+    width: 100% !important;
+    padding: 14px 28px !important;
+    background: linear-gradient(135deg, #FF6B35, #e05a2b) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    font-family: inherit !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+}
+
+.submit-row input[type="submit"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4) !important;
+}
+
+.submit-row input[type="submit"]:active {
+    transform: translateY(0) !important;
+}
+
+.password-reset-link {
+    text-align: center !important;
+    margin-top: 20px !important;
+}
+
+.password-reset-link a {
+    color: #FF6B35 !important;
+    text-decoration: none !important;
+    font-size: 0.9rem !important;
+}
+
+.password-reset-link a:hover {
+    text-decoration: underline !important;
+}
+
+.errornote {
+    background: #fef2f2 !important;
+    color: #dc2626 !important;
+    border: 1px solid #fecaca !important;
+    padding: 14px 16px !important;
+    border-radius: 10px !important;
+    margin-bottom: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    font-size: 0.9rem !important;
+}
+
+.errornote::before {
+    content: "⚠" !important;
+}
+
+.errorlist {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 5px 0 0 0 !important;
+}
+
+.errorlist li {
+    color: #dc2626 !important;
+    font-size: 0.85rem !important;
+}
+
+#footer {
+    display: none !important;
+}
+
+.messagelist {
+    margin-bottom: 20px !important;
+    padding: 0 !important;
+}
+
+.messagelist li {
+    padding: 14px 16px !important;
+    border-radius: 10px !important;
+    margin-bottom: 10px !important;
+    list-style: none !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+.messagelist li.success {
+    background: #f0fdf4 !important;
+    color: #16a34a !important;
+    border: 1px solid #bbf7d0 !important;
+}
+
+.messagelist li.success::before {
+    content: "✓" !important;
+}
+
+.messagelist li.error {
+    background: #fef2f2 !important;
+    color: #dc2626 !important;
+    border: 1px solid #fecaca !important;
+}
+
+.messagelist li.error::before {
+    content: "✕" !important;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#content {
+    animation: fadeInUp 0.4s ease;
+}
+
+@media (max-width: 480px) {
+    body.login {
+        padding: 20px !important;
+    }
+
+    #content {
+        padding: 30px 24px !important;
+    }
+
+    #site-name a {
+        font-size: 1.3rem !important;
+    }
+
+    #content h1 {
+        font-size: 1.5rem !important;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}

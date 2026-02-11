@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol - ConstructCycle</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Using login.css since the layout is identical -->
+    <link rel="stylesheet" href="/static/css/login.css">
+</head>
+
+<body>
+    <div class="auth-page">
+        <div class="auth-container register">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <a href="/" class="logo">
+                        <div class="logo-icon"><i class="fas fa-recycle"></i></div>
+                        <span>ConstructCycle</span>
+                    </a>
+                    <h1>Hesap Oluştur</h1>
+                    <p>Sürdürülebilir inşaat dünyasına katılın</p>
+                </div>
+
+                <div id="alert-container"></div>
+
+                <form id="register-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="first_name">Ad <span class="required">*</span></label>
+                            <input type="text" id="first_name" name="first_name" class="form-input" placeholder="Adınız"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="last_name">Soyad <span class="required">*</span></label>
+                            <input type="text" id="last_name" name="last_name" class="form-input"
+                                placeholder="Soyadınız" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">E-posta Adresi <span class="required">*</span></label>
+                        <div class="form-input-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" class="form-input" placeholder="ornek@email.com"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="phone">Telefon Numarası <span class="required">*</span></label>
+                        <div class="form-input-icon">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="phone" name="phone" class="form-input" placeholder="5XX XXX XX XX"
+                                required>
+                        </div>
+                        <div class="form-help">İletişim için kullanılacaktır.</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="password">Şifre <span class="required">*</span></label>
+                            <div class="form-input-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="password" name="password" class="form-input"
+                                    placeholder="••••••••" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="password_confirm">Şifre Tekrar <span
+                                    class="required">*</span></label>
+                            <div class="form-input-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="password_confirm" name="password_confirm" class="form-input"
+                                    placeholder="••••••••" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-checkbox">
+                            <input type="checkbox" id="terms" name="terms" required>
+                            <span><a href="#">Kullanım Şartları</a>'nı ve <a href="#">Gizlilik Politikası</a>'nı okudum
+                                ve kabul ediyorum.</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block" id="submit-btn">
+                        <span>Kayıt Ol</span>
+                        <i class="fas fa-user-plus"></i>
+                    </button>
+                </form>
+
+                <div class="auth-divider"><span>veya</span></div>
+
+                <div class="social-login">
+                    <button type="button" class="social-btn">
+                        <i class="fab fa-google"></i>
+                        <span>Google</span>
+                    </button>
+                    <button type="button" class="social-btn">
+                        <i class="fab fa-facebook"></i>
+                        <span>Facebook</span>
+                    </button>
+                </div>
+
+                <div class="auth-footer">
+                    <p>Zaten hesabınız var mı? <a href="/login/">Giriş Yap</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="/static/js/main.js"></script>
+    <!-- Page Specific Script -->
+    <script src="/static/js/register.js?v=1.0.1"></script>
+</body>
+
+</html>

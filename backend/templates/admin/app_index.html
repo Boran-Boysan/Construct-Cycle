@@ -1,0 +1,161 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content %}
+<style>
+    #content-main {
+        padding: 30px;
+    }
+
+    .module {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        border: 1px solid #E5E7EB;
+        margin-bottom: 20px;
+    }
+
+    .module caption {
+        background: linear-gradient(135deg, #264653, #2A9D8F);
+        color: white;
+        padding: 14px 18px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-align: left;
+    }
+
+    .module table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .module th {
+        padding: 14px 18px;
+        text-align: left;
+        border-bottom: 1px solid #E5E7EB;
+        background: #F9FAFB;
+    }
+
+    .module th a {
+        color: #1F2937;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    .module th a:hover {
+        color: #FF6B35;
+    }
+
+    .module td {
+        padding: 14px 18px;
+        text-align: right;
+        border-bottom: 1px solid #F3F4F6;
+        white-space: nowrap;
+    }
+
+    .module tr:last-child td,
+    .module tr:last-child th {
+        border-bottom: none;
+    }
+
+    .module tr:hover {
+        background: #F9FAFB;
+    }
+
+    .action-links {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+    }
+
+    .action-link {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: all 0.2s ease;
+    }
+
+    .action-link.add {
+        background: #10B981;
+        color: white;
+    }
+
+    .action-link.add:hover {
+        background: #0EA472;
+        transform: translateY(-1px);
+    }
+
+    .action-link.change {
+        background: #3B82F6;
+        color: white;
+    }
+
+    .action-link.change:hover {
+        background: #2563EB;
+        transform: translateY(-1px);
+    }
+
+    .action-link.delete {
+        background: #EF4444;
+        color: white;
+    }
+
+    .action-link.delete:hover {
+        background: #DC2626;
+        transform: translateY(-1px);
+    }
+</style>
+
+<div id="content-main">
+    {% if app_list %}
+        {% for app in app_list %}
+        <div class="module">
+            <table>
+                <caption>{{ app.name }}</caption>
+                {% for model in app.models %}
+                <tr>
+                    <th>
+                        {% if model.admin_url %}
+                        <a href="{{ model.admin_url }}">{{ model.name }}</a>
+                        {% else %}
+                        {{ model.name }}
+                        {% endif %}
+                    </th>
+                    <td>
+                        <div class="action-links">
+                            {% if model.add_url %}
+                            <a href="{{ model.add_url }}" class="action-link add">
+                                + Ekle
+                            </a>
+                            {% endif %}
+                            {% if model.admin_url %}
+                            <a href="{{ model.admin_url }}" class="action-link change">
+                                ✎ Değiştir
+                            </a>
+                            {% endif %}
+                            {% if model.admin_url %}
+                            <a href="{{ model.admin_url }}" class="action-link delete">
+                                ✕ Sil
+                            </a>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% endfor %}
+    {% else %}
+    <p>{% trans "You don't have permission to view or edit anything." %}</p>
+    {% endif %}
+</div>
+{% endblock %}

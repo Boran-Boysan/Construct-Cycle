@@ -1,0 +1,440 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_list %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    /* Change List Özel Stiller */
+    #changelist {
+        padding: 20px;
+    }
+
+    #changelist-form {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        border: 1px solid #E5E7EB;
+    }
+
+    /* Toolbar - Üst kısım */
+    #toolbar {
+        background: #F9FAFB;
+        padding: 15px 20px;
+        border-bottom: 1px solid #E5E7EB;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    #searchbar {
+        padding: 10px 15px;
+        border: 2px solid #E5E7EB;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        min-width: 300px;
+        transition: all 0.2s ease;
+    }
+
+    #searchbar:focus {
+        outline: none;
+        border-color: #2A9D8F;
+        box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.15);
+    }
+
+    /* Actions Bar */
+    .actions {
+        background: linear-gradient(135deg, #2A9D8F, #3DB4A6) !important;
+        padding: 15px 20px !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 15px !important;
+        flex-wrap: wrap !important;
+    }
+
+    .actions label {
+        color: white !important;
+        font-weight: 500 !important;
+    }
+
+    .actions select {
+        padding: 10px 15px !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-size: 0.9rem !important;
+        min-width: 250px !important;
+        cursor: pointer !important;
+    }
+
+    .actions button {
+        background: #FF6B35 !important;
+        color: white !important;
+        border: none !important;
+        padding: 10px 20px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .actions button:hover {
+        background: #E55A2B !important;
+        transform: translateY(-1px) !important;
+    }
+
+    /* Seçim sayısı */
+    .actions .action-counter {
+        color: white !important;
+        font-weight: 500 !important;
+        margin-left: auto !important;
+    }
+
+    /* Custom Delete Button */
+    .custom-delete-btn {
+        background: #EF4444 !important;
+        color: white !important;
+        border: none !important;
+        padding: 10px 20px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    .custom-delete-btn:hover {
+        background: #DC2626 !important;
+        transform: translateY(-1px) !important;
+    }
+
+    /* Tablo */
+    #result_list {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    #result_list thead th {
+        background: linear-gradient(135deg, #2A9D8F, #3DB4A6) !important;
+        color: white !important;
+        padding: 14px 16px !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        font-size: 0.8rem !important;
+        letter-spacing: 0.5px !important;
+        border: none !important;
+        text-align: left !important;
+    }
+
+    #result_list thead th a {
+        color: white !important;
+        text-decoration: none !important;
+    }
+
+    #result_list thead th.sorted {
+        background: #238276 !important;
+    }
+
+    #result_list tbody tr {
+        transition: all 0.2s ease;
+    }
+
+    #result_list tbody tr:nth-child(even) {
+        background: #F9FAFB;
+    }
+
+    #result_list tbody tr:hover {
+        background: rgba(42, 157, 143, 0.1) !important;
+    }
+
+    #result_list tbody tr.selected {
+        background: rgba(255, 107, 53, 0.15) !important;
+    }
+
+    #result_list tbody td {
+        padding: 14px 16px !important;
+        border-bottom: 1px solid #E5E7EB !important;
+        color: #374151 !important;
+    }
+
+    #result_list tbody td a {
+        color: #FF6B35 !important;
+        text-decoration: none !important;
+        font-weight: 500 !important;
+    }
+
+    #result_list tbody td a:hover {
+        text-decoration: underline !important;
+    }
+
+    /* Checkbox Styling */
+    #result_list tbody td.action-checkbox,
+    #result_list thead th.action-checkbox-column {
+        width: 50px !important;
+        text-align: center !important;
+        padding: 14px 10px !important;
+    }
+
+    #result_list input[type="checkbox"] {
+        width: 20px !important;
+        height: 20px !important;
+        cursor: pointer !important;
+        accent-color: #2A9D8F !important;
+    }
+
+    /* Tümünü Seç Checkbox */
+    #action-toggle {
+        width: 20px !important;
+        height: 20px !important;
+        cursor: pointer !important;
+        accent-color: white !important;
+    }
+
+    /* Pagination */
+    .paginator {
+        background: #F9FAFB !important;
+        padding: 15px 20px !important;
+        border-top: 1px solid #E5E7EB !important;
+        text-align: center !important;
+    }
+
+    .paginator a {
+        color: #2A9D8F !important;
+        text-decoration: none !important;
+        padding: 8px 14px !important;
+        border: 1px solid #E5E7EB !important;
+        border-radius: 6px !important;
+        margin: 0 4px !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .paginator a:hover {
+        background: #2A9D8F !important;
+        color: white !important;
+        border-color: #2A9D8F !important;
+    }
+
+    /* Object Tools */
+    .object-tools {
+        margin-bottom: 20px !important;
+        display: flex !important;
+        gap: 10px !important;
+        justify-content: flex-end !important;
+    }
+
+    .object-tools a {
+        background: #10B981 !important;
+        color: white !important;
+        padding: 10px 18px !important;
+        border-radius: 8px !important;
+        text-decoration: none !important;
+        font-weight: 500 !important;
+        transition: all 0.2s ease !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+    }
+
+    .object-tools a:hover {
+        background: #0EA472 !important;
+        transform: translateY(-1px) !important;
+    }
+
+    /* Filter sidebar */
+    #changelist-filter {
+        background: white !important;
+        border-radius: 12px !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+        padding: 20px !important;
+        border: 1px solid #E5E7EB !important;
+    }
+
+    #changelist-filter h2 {
+        color: #1F2937 !important;
+        font-size: 1rem !important;
+        margin-bottom: 15px !important;
+        padding-bottom: 10px !important;
+        border-bottom: 2px solid #2A9D8F !important;
+    }
+
+    #changelist-filter h3 {
+        color: #374151 !important;
+        font-size: 0.85rem !important;
+        text-transform: uppercase !important;
+        margin: 15px 0 8px 0 !important;
+    }
+
+    #changelist-filter ul {
+        list-style: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    #changelist-filter li {
+        margin: 4px 0 !important;
+    }
+
+    #changelist-filter li a {
+        color: #6B7280 !important;
+        text-decoration: none !important;
+        padding: 6px 10px !important;
+        display: block !important;
+        border-radius: 6px !important;
+        transition: all 0.2s ease !important;
+    }
+
+    #changelist-filter li a:hover {
+        background: #F3F4F6 !important;
+        color: #1F2937 !important;
+    }
+
+    #changelist-filter li.selected a {
+        background: #2A9D8F !important;
+        color: white !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    {% block object-tools %}
+    {% if has_add_permission %}
+    <ul class="object-tools">
+        <li>
+            <a href="{% url opts|admin_urlname:'add' %}{% if is_popup %}?_popup=1{% endif %}">
+                + {{ opts.verbose_name }} Ekle
+            </a>
+        </li>
+    </ul>
+    {% endif %}
+    {% endblock %}
+
+    {% if cl.formset and cl.formset.errors %}
+    <p class="errornote">
+        {% blocktrans count counter=cl.formset.total_error_count %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
+    </p>
+    {{ cl.formset.non_form_errors }}
+    {% endif %}
+
+    <form id="changelist-form" method="post"{% if cl.formset and cl.formset.is_multipart %} enctype="multipart/form-data"{% endif %} novalidate>
+        {% csrf_token %}
+
+        {% if cl.formset %}
+        <div>{{ cl.formset.management_form }}</div>
+        {% endif %}
+
+        {% block search %}
+        {% if cl.search_fields %}
+        <div id="toolbar">
+            <form id="changelist-search" method="get">
+                <input type="text" size="40" name="{{ search_var }}" value="{{ cl.query }}" id="searchbar" placeholder="Ara...">
+                <input type="submit" value="Ara" style="background: #2A9D8F; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 500;">
+                {% if show_result_count %}
+                <span class="small quiet">{% blocktrans count counter=cl.result_count %} {{ counter }} sonuç{% plural %}{{ counter }} sonuç{% endblocktrans %} ({% blocktrans with full_result_count=cl.full_result_count %}toplam {{ full_result_count }}{% endblocktrans %})</span>
+                {% endif %}
+            </form>
+        </div>
+        {% endif %}
+        {% endblock %}
+
+        {% block actions %}
+        {% if cl.has_action_checkboxes %}
+        <div class="actions">
+            <label style="color: white; font-weight: 600;">Eylem:</label>
+            <select name="action" required>
+                <option value="" selected>---------</option>
+                {% for action in action_form.fields.action.choices %}
+                {% if action.0 %}
+                <option value="{{ action.0 }}">{{ action.1 }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+            <button type="submit" class="button" title="Seçili öğelere uygula" name="index" value="0">Uygula</button>
+
+            <button type="submit" name="action" value="delete_selected" class="custom-delete-btn" onclick="return confirm('Seçili öğeleri silmek istediğinizden emin misiniz?');">
+                ✕ Seçilileri Sil
+            </button>
+
+            <span class="action-counter" data-actions-icnt="{{ cl.result_count }}">
+                <span class="selected-count">0</span> öğe seçildi
+            </span>
+        </div>
+        {% endif %}
+        {% endblock %}
+
+        {% block result_list %}
+        {% if action_form and actions_on_top and cl.show_admin_actions %}
+        {% endif %}
+        {% result_list cl %}
+        {% if action_form and actions_on_bottom and cl.show_admin_actions %}
+        {% endif %}
+        {% endblock %}
+
+        {% block pagination %}{% pagination cl %}{% endblock %}
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Seçili sayısını güncelle
+    function updateSelectedCount() {
+        const checkboxes = document.querySelectorAll('input[name="_selected_action"]:checked');
+        const countSpan = document.querySelector('.selected-count');
+        if (countSpan) {
+            countSpan.textContent = checkboxes.length;
+        }
+
+        // Seçili satırları vurgula
+        document.querySelectorAll('#result_list tbody tr').forEach(function(row) {
+            const checkbox = row.querySelector('input[name="_selected_action"]');
+            if (checkbox && checkbox.checked) {
+                row.classList.add('selected');
+            } else {
+                row.classList.remove('selected');
+            }
+        });
+    }
+
+    // Tüm checkbox'lara event listener ekle
+    document.querySelectorAll('input[name="_selected_action"]').forEach(function(checkbox) {
+        checkbox.addEventListener('change', updateSelectedCount);
+    });
+
+    // Tümünü seç checkbox'ı
+    const toggleAll = document.getElementById('action-toggle');
+    if (toggleAll) {
+        toggleAll.addEventListener('change', function() {
+            document.querySelectorAll('input[name="_selected_action"]').forEach(function(checkbox) {
+                checkbox.checked = toggleAll.checked;
+            });
+            updateSelectedCount();
+        });
+    }
+
+    // Sayfa yüklendiğinde güncelle
+    updateSelectedCount();
+});
+</script>
+{% endblock %}
+
+{% block sidebar %}
+{% if cl.has_filters %}
+<div id="changelist-filter">
+    <h2>Filtrele</h2>
+    {% for spec in cl.filter_specs %}
+    {% if spec.choices %}
+    <h3>{{ spec.title }}</h3>
+    <ul>
+        {% for choice in spec.choices %}
+        <li{% if choice.selected %} class="selected"{% endif %}>
+            <a href="{{ choice.query_string }}">{{ choice.display }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

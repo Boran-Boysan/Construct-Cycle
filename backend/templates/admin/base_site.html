@@ -1,0 +1,90 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | ConstructCycle Yönetim Paneli{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <span style="display: inline-flex; align-items: center; gap: 10px;">
+            <span style="width: 40px; height: 40px; background: linear-gradient(135deg, #FF6B35, #2A9D8F); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.25rem;">♻</span>
+            ConstructCycle Yönetim Paneli
+        </span>
+    </a>
+</h1>
+{% endblock %}
+
+{% block extrahead %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    /* HEADER - INLINE OLARAK ZORLA */
+    #header {
+        background: linear-gradient(135deg, #2A9D8F 0%, #3DB4A6 100%) !important;
+        color: white !important;
+        padding: 15px 20px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    #header h1, #header h1 a, #header h1 a:link, #header h1 a:visited {
+        color: white !important;
+        font-weight: 700 !important;
+        font-size: 1.5rem !important;
+        text-decoration: none !important;
+    }
+
+    #user-tools {
+        color: rgba(255, 255, 255, 0.95) !important;
+        font-size: 0.9rem !important;
+    }
+
+    #user-tools a, #user-tools a:link, #user-tools a:visited {
+        color: white !important;
+        text-decoration: none !important;
+        padding: 8px 16px !important;
+        border-radius: 8px !important;
+        transition: all 0.2s ease !important;
+        margin-left: 8px !important;
+    }
+
+    #user-tools a:hover {
+        background: rgba(255, 255, 255, 0.15) !important;
+    }
+
+    div.breadcrumbs {
+        background: #F3F4F6 !important;
+        color: #4B5563 !important;
+        padding: 12px 20px !important;
+        font-size: 0.9rem !important;
+        border-bottom: 1px solid #E5E7EB !important;
+    }
+
+    div.breadcrumbs a {
+        color: #FF6B35 !important;
+        text-decoration: none !important;
+    }
+
+    div.breadcrumbs a:hover {
+        text-decoration: underline !important;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    }
+
+    /* Theme toggle butonunu beyaz yap */
+    #toggle-nav-sidebar, .theme-toggle, button[title*="theme"], button[title*="tema"] {
+        color: white !important;
+    }
+</style>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin/css/custom_admin.css' %}">
+{% endblock %}
+
+{% block footer %}
+<div id="footer" style="text-align: center; padding: 20px; color: #6B7280; font-size: 0.85rem; border-top: 1px solid #E5E7EB; margin-top: 40px;">
+    <p>© 2024 ConstructCycle - Sürdürülebilir İnşaat Malzemesi Pazaryeri</p>
+</div>
+{% endblock %}

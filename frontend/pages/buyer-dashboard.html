@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alıcı Paneli - ConstructCycle</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="/" class="logo">🏗️ ConstructCycle</a>
+            <nav class="nav">
+                <a href="/products.html">Ürünler</a>
+                <a href="/my-orders.html">Siparişlerim</a>
+                <a href="/favorites.html">Favoriler</a>
+                <a href="/profile.html">Profilim</a>
+            </nav>
+            <button onclick="Auth.logout()" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Çıkış
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>👋 Hoş Geldiniz, <span id="user-name">Kullanıcı</span>!</h1>
+                <p>Alıcı Paneliniz</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-info">
+                        <h3 id="total-orders">0</h3>
+                        <p>Toplam Sipariş</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-info">
+                        <h3 id="pending-orders">0</h3>
+                        <p>Bekleyen Sipariş</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">❤️</div>
+                    <div class="stat-info">
+                        <h3 id="favorites">0</h3>
+                        <p>Favori Ürün</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💬</div>
+                    <div class="stat-info">
+                        <h3 id="messages">0</h3>
+                        <p>Okunmamış Mesaj</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h2>Hızlı İşlemler</h2>
+                <div class="action-buttons">
+                    <a href="/products.html" class="action-btn">
+                        <i class="fas fa-search"></i>
+                        <span>Ürün Ara</span>
+                    </a>
+                    <a href="/my-orders.html" class="action-btn">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>Siparişlerim</span>
+                    </a>
+                    <a href="/favorites.html" class="action-btn">
+                        <i class="fas fa-heart"></i>
+                        <span>Favorilerim</span>
+                    </a>
+                    <a href="/messages.html" class="action-btn">
+                        <i class="fas fa-comments"></i>
+                        <span>Mesajlar</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="recent-section">
+                <h2>Son Siparişler</h2>
+                <div id="recent-orders-list">
+                    <div class="empty-state">
+                        <i class="fas fa-shopping-bag"></i>
+                        <p>Henüz hiç sipariş vermediniz.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript Files -->
+    <script src="../js/main.js"></script>
+    <script src="../js/buyer-dashboard.js"></script>
+</body>
+</html>
